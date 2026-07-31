@@ -1,0 +1,83 @@
+
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+All included content in "DSNB_computation_copy" is listed below:
+Omitted redundant or trial runs 
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+Included DSNB computation code
+requires the excluded 1D CCSN simulation data or population synthesis data
+note: all green "on" comments are loops enabled, all red "off" comments are commented out loops
+format: mathematica wolfram notebooks 
+	full code - "2para_DSNB_v19.nb" 
+	full code with fiducial case combination only - "2para_DSNB_v19_fidOnly.nb"
+	full code with average nuetrino spectra for fiducial case - "2para_DSNB_v19_avgNuSpec.nb" 
+	testing average BH spectral parameter and temperature fits - "alphaTest.nb" 	
+WARNING: full code "2para_DSNB_v19.nb" when enable requires large computational time 
+
+Included output files from computation code 
+format: Wolfram Language source file or CSV 
+	all outputs separated average BH spectral pinching parameter directory -  "output_dsnbCode_final"  
+	output for fiducial case combination only directory - "output_dsnbCode_fidOnly" 
+
+Included flow chart of computation code
+format: microsoft visio or PDF
+	abridged computational procedure flowchart - "DSNB Project Abridged Flow Chart" 
+	full computational procedure flowchart - "DSNB Project Complete Flow Chart"  
+
+Included DSNB output-file-reader code
+requires output directory from full run: "output_dsnbCode_final" 
+requires digitzation of plots from other papers 
+format: mathematica wolfram notebook 
+	analysis with output DSNB data - "dsnbDataReader_v10.nb"
+
+Included digitzation of DSNB plots from other papers
+	figure 4 from Horiuchi et al. 2009 - "horiuchi2009_DSNB" 
+	figure 1 from SK collaboration Abe et al. 2025 - "abe2025_SK" 
+	figure 5 from Kresse et al. 2021 - "kresse2021_DSNB" 
+	figure 7 from Horiuchi et al. 2021 - "horiuchi2021_DSNB"
+	figure 7 from Lunardini et al. 2025 - "lunardini2025_DSNB" 
+and  IBD cross section copied data 
+	table 1 from Strumia and Vissani 2003 - "strumia_vissani2003_IBD" 	
+
+Included final plot code 
+requires "finalPlotData" from DSNB output-file reader code 
+format: python file
+	final plotting code - "grapher_v2.py"
+
+Included final plot data output from DSNB output-file-reader code 
+format: CSV 
+	final plot data directory - "finalPlotData" 
+
+Included finalPlots for paper 
+for both mathematica and python formats
+format: PDF 	
+	final plots directory - "finalPlots" 
+	
+	
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+All excluded content in "DSNB_computation_copy" is listed below:
+Omitted redundant or trial runs 
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+Excluded 1D CCSN simulation data from Garching Group:
+separated by average BH spectral pinching parameter 
+	Necessary for running "2para_DSNB" code 
+	"garching_SN_sims-a1.0"
+	"garching_SN_sims-a1.5" 
+	"garching_SN_sims-a2.0" 
+	"garching_SN_sims-a2.5" 
+	"garching_SN_sims-a3.0" 
+not separated (i.e. original directory excluding He) 
+	"garching_SN_sims_full" or "garching_SN_sims" 
+disused helium version (to incorporate binary contribution in Kresse et al. 2021)
+	"garching_SN_sims_He" 	
+please request permission from Garching Group 
+
+Excluded popluation syntheses
+	Necessary for running "2para_DSNB" code 
+	isolated population synthesis - "NoBinarys2_Mco_M4_Mu4_SN" 
+	binary population synthesis - "BinarySynthesis2_SN_Mco_M4_Mu4" 
+please request permission from authors 
