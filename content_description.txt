@@ -54,6 +54,16 @@ Included finalPlots for paper
 for both mathematica and python formats
 format: PDF 	
 	final plots directory - "finalPlots" 
+
+Included November 2026 Updates:
+1. New versions of codes: grapher_v3.py and dsnbDataReader_v11.nb
+2. More plots in finalPlotData and finalPlots
+3. Repeat of entire dsnbDataReader output in saves_newFiducial directory
+4. Sorted and updated plot digitization directory (for organization) 
+
+November 2026 Update Description: 
+November 22 2026 update per se: change fiducial case to be normal hierarchy (NH) instead of no MSW effect (original), updated integrated DSNB final plot, include DSNB indication from SK 2026 (with Horiuchi et al. 2009 (6 MeV, Max) best-fit) in figure 3 of arXiv 2610.35619, and redid all corresponding plots in the DSNB analysis code (i.e. dsnbDataReader) and final plots in the python code. Also sorted plot digitizations into a single directory. See git commit for all details. 
+
 	
 	
 -----------------------------------------------------------------------------------------------------------------------

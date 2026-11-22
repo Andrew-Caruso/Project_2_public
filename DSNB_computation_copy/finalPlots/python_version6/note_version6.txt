@@ -1,0 +1,7 @@
+NOTE:
+1. Switched to new fiducial choice with NH instead of No MSW effect. 
+2. Also, made DSNB flux plots consistent, such that flavor conversion
+is fixed for both extrema AND fiducial. Originally fiducial was fixed to no MSW for all plots. 
+3. Changed integrated DSNB range 
+4. the only plot unaffected by this change is the 1P vs 2P criterion plot since the fiducial engine+progen data 
+remains the same. 

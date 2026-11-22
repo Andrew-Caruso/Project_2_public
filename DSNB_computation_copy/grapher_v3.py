@@ -33,7 +33,7 @@ def loadin(x):
 def loadin2(x):
     #input x is name of SK theory data 
     #assumes CSV file type
-    tempDir2 = currentDir+"/abe2025_SK/"+x
+    tempDir2 = currentDir+"/plot_digitizations/abe2025_SK/"+x
     tempTempData2=np.genfromtxt(tempDir2,delimiter=',',dtype=None) #import data file handling any data type
     tempData2=np.asarray(tempTempData2) #convert to numpy array
     return tempData2
@@ -41,10 +41,20 @@ def loadin2(x):
 def loadin3(x):
     #input x is name of Kresse theory data 
     #assumes CSV file type
-    tempDir3 = currentDir+"/kresse2021_DSNB/"+x
+    tempDir3 = currentDir+"/plot_digitizations/kresse2021_DSNB/"+x
     tempTempData3=np.genfromtxt(tempDir3,delimiter=',',dtype=None) #import data file handling any data type
     tempData3=np.asarray(tempTempData3) #convert to numpy array
     return tempData3
+
+def loadin4(x):
+    #input x is name of SK 2026 indication fig 3 data 
+    #normalized (to 3.6 for Enu>13.3 MeV) Horiuchi 2009 (6 MeV Max) best fitted to SK indication 
+    #assumes CSV file type
+    tempDir4 = currentDir+"/plot_digitizations/SKcollaboration2026_DSNB/"+x
+    tempTempData4=np.genfromtxt(tempDir4,delimiter=',',dtype=None) #import data file handling any data type
+    tempData4=np.asarray(tempTempData4) #convert to numpy array
+    return tempData4
+
 
 def printer(inArray):
     n=0
@@ -138,8 +148,9 @@ def dsnbFluxPlotter(x,y,z,name):
     tempAx.fill_between(tempSFRmin[:,0],tempMin[:,1],tempFiducial[:,1],color='tab:green',alpha=0.3)
     tempAx.fill_between(tempSFRmin[:,0],tempFiducial[:,1],tempMax[:,1],color='tab:green',alpha=0.3)
     #adjust axes
-    tempAx.set_xlabel(r"$\text{E}_{\nu} \text{(MeV)}$",fontsize=z,labelpad=2)
-    tempAx.set_ylabel(r"$\frac{d\phi}{dE} (\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$)",fontsize=z,labelpad=2)
+    tempAx.set_xlabel(r"$\text{E}_{\overline{\nu}_{\!e}} \text{[MeV]}$",fontsize=z,labelpad=2)
+    #tempAx.set_ylabel(r"$\frac{d\phi}{dE} (\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$)",fontsize=z,labelpad=2)
+    tempAx.set_ylabel(r"$d\phi/dE [\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$]",fontsize=z,labelpad=2)
     tempAx.set_title(y,fontsize=z)
     tempAx.set_xlim(1,35)
     tempAx.set_ylim(0.2,30)
@@ -200,6 +211,7 @@ take in mathematica plot data and re-create plots alla python scienceplots
 #3 = DSNB flux finale (with SK bounds)
 #4 = dSNB flux finale (with theory bounds)
 #5 = binned DSNB flux finale (with SK bounds)
+#6 = DSNB flux finale (with SK 2026 indication)
 
 plotBool=2
 
@@ -271,11 +283,11 @@ if plotBool==0:
     print("interY2P: ",interY2P)
 
     #create figure for 1P/2P plots 
-    criterionfig, axCrit = plt.subplots(nrows=1,ncols=2) #figsize=(40,40))#create figure 
-    criterionfig.set_size_inches(10,10)
-    criterionfig.set_figheight(1.2)
-    criterionfig.set_figwidth(4)
-    chosenFontSize=4 
+    criterionfig, axCrit = plt.subplots(nrows=2,ncols=1) #figsize=(40,40))#create figure 
+    #criterionfig.set_size_inches(1,2) #width height of figure in inches
+    criterionfig.set_figheight(4)
+    criterionfig.set_figwidth(3)
+    chosenFontSize=9
 
     #chose contrasting colors 
     NScolor="goldenrod"
@@ -289,7 +301,7 @@ if plotBool==0:
     axCrit[0].set_xlabel(r"$\mu_4$",fontsize=chosenFontSize,labelpad=2)
     axCrit[0].set_ylabel("Stellar Count",fontsize=chosenFontSize,labelpad=2)
     axCrit[0].set_title("1 Parameter Criterion",fontsize=chosenFontSize)
-    axCrit[0].legend(loc='upper left',prop={'size':3},bbox_to_anchor=(0.59,0.97))
+    axCrit[0].legend(loc='upper left',prop={'size':6},bbox_to_anchor=(0.59,0.97))
     axCrit[0].tick_params(axis='both',which='major',labelsize=chosenFontSize)
     axCrit[0].set_xlim(0,0.2)
     axCrit[0].set_ylim(0,40)
@@ -304,15 +316,17 @@ if plotBool==0:
     axCrit[1].plot(plot2PcritPoints[:,0],plot2PcritPoints[:,1],color='red',linewidth=0.4,label=r"$\mu_4$=\,"+slope2P+r"$(M_4\mu_4\!\!)$+"+interY2P)
     axCrit[1].scatter(plot2PNSoutliers[:,0],plot2PNSoutliers[:,1],facecolors='none',marker='o',s=2,label="outlier",color='black',linewidth=0.3,zorder=3)
     axCrit[1].scatter(plot2PBHoutliers[:,0],plot2PBHoutliers[:,1],facecolors='none',marker='o',s=2,color='black',linewidth=0.3,zorder=4)
-    axCrit[1].legend(loc="upper right",prop={'size':3},bbox_to_anchor=(0.57,0.98))
+    axCrit[1].legend(loc="upper right",prop={'size':6},bbox_to_anchor=(0.57,0.98))
     axCrit[1].set_xlim(0,0.39)
     axCrit[1].set_ylim(0,0.2)
 
 
     #export and show
-    criterionfig.tight_layout(pad=1.1)
+    criterionfig.tight_layout(pad=1.0) #pad controls white space around plots
     #save the figure directly when figure is shown
-    #savefig method does not coincide properly
+    #savefig method does not coincide properly if using rows only 
+    #but if using columns only, then can save via line below 
+    criterionfig.savefig("criterionPlot.pdf")
     criterionfig.show()
 
 
@@ -322,9 +336,10 @@ if plotBool==0:
 if plotBool==1:
     print("creating DSNB flux plots")
     #import no MSW plot data 
-    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNoMSW.csv")
-    rawPlot2PdataIH=loadin("dsnbFluxPlotDataIH.csv")
-    rawPlot2PdataNH=loadin("dsnbFluxPlotDataNH.csv")
+    #NOTE:use the correct version i.e. fiducial and extrema (with/without SFR uncertaitny) assume all same flavor conversion no MSW, IH, NH
+    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNoMSWcorrect.csv")
+    rawPlot2PdataIH=loadin("dsnbFluxPlotDataIHcorrect.csv")
+    rawPlot2PdataNH=loadin("dsnbFluxPlotDataNHcorrect.csv")
     #printer(rawPlot2PdataNoMSW)
     #in to convert from strings
     #in the format of [["name",data],...] 
@@ -332,7 +347,7 @@ if plotBool==1:
     #index 5 fiducial case, index 7 max, index 9 min
 
     #chose font size
-    chosenFontSize=4 
+    chosenFontSize=5
     #create DSNB flux plots for no MSW, IH, and NH
     #input data, title, fontSize, and fileName (for exportation)
     dsnbFluxPlotter(rawPlot2PdataNoMSW,"DSNB Flux (No MSW)",chosenFontSize,"dsnbFluxNoMSW")
@@ -347,9 +362,11 @@ if plotBool==1:
 if plotBool==2:
     print("creating integrated DSNB flux plot")
     #rawintDSNBFluxData=loadin("intDSNBPlotData.csv")
-    #for two different energy integration ranges 16 MeV or 9 MeV to 40 MeV
-    rawintDSNBFluxData1640 =loadin("intDSNBPlotData1640.csv")
-    rawintDSNBFluxData940 =loadin("intDSNBPlotData940.csv")
+    #NOTE:for two different energy integration ranges 17.3 MeV or 13.3 MeV to 40 MeV
+    #instead of 16 MeV or 9 MeV to 40 MeV 
+    #also assumes fiducial (NH instead of no MSW)
+    rawintDSNBFluxData1640 =loadin("intDSNBPlotData17p340correct.csv")
+    rawintDSNBFluxData940 =loadin("intDSNBPlotData13p3correct.csv")
     #printer(rawintDSNBFluxData1640)
     #print("\n")
     #printer(rawintDSNBFluxData940)
@@ -390,14 +407,20 @@ if plotBool==2:
     #create x points (1 to length of data points)
     #also convert from numpy array to list
     #for integrated 16-40 MeV range
-    xVals1640=np.arange(1,len(caseNames1640),1).tolist()
+        #original 
+    #xVals1640=np.arange(1,len(caseNames1640),1).tolist()
+        #updated 
+    xVals1640=np.arange(0.875,10.875,1).tolist()
     fullxVals1640=np.arange(0,len(caseNames1640)+1,1).tolist()
     #print("original x values:",xVals1640," ",type(xVals1640))
     #print("full x values: ",fullxVals1640)
     #for integrated 9-40 MeV range
-    xVals940=np.arange(1,len(caseNames940)-1,1).tolist() #exclude last
-    xVals940= np.append(xVals940,len(caseNames940)-0.75)#add last point with offsef 
-    print(len(caseNames940))
+        #original
+    #xVals940=np.arange(1,len(caseNames940)-1,1).tolist() #exclude last
+    #xVals940= np.append(xVals940,len(caseNames940)-0.75)#add last point with offsef 
+        #updated
+    xVals940=np.arange(1.125,11.125,1) #offset all by adding 0.25
+    #print(len(caseNames940))
     fullxVals940=np.arange(0,len(caseNames940)+1,1).tolist()
     #print("original x values:",xVals940," ",type(xVals940))
     #print("full x values: ",fullxVals940)
@@ -437,7 +460,7 @@ if plotBool==2:
     #fig3.tight_layout(pad=1)
     fig3.tight_layout(h_pad=1,w_pad=1.2)
     #chose font size
-    chosenFontSize=4 
+    chosenFontSize=6 
     colorList =["black","tab:blue","tab:orange","tab:green","tab:purple","tab:red","tan","crimson","dodgerblue","lightsteelblue","gold"]
     colorBlindList=CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00']
     #from thriveth from https://gist.github.com/thriveth/8560036 
@@ -465,14 +488,14 @@ if plotBool==2:
     ax3.set_title("Integrated DSNB Flux",fontsize=chosenFontSize)
     ax3.set_yscale("log")
     ax3.set_ylim(0.7,35)
-    ax3.set_ylabel(r"$\phi_{\text{above}} (\text{cm}^{-1}\text{s}^{-1}$)",fontsize=chosenFontSize,labelpad=2)
+    ax3.set_ylabel(r"$\phi_{\text{above}} [\text{cm}^{-1}\text{s}^{-1}$]",fontsize=chosenFontSize,labelpad=2)
     #ax3.legend(loc='center',bbox_to_anchor=(0.15,0.7,0.1,0.1),prop={'size':chosenFontSize})#x,y,width,height
     #reference for using annotate: https://stackoverflow.com/questions/25123127/how-do-you-just-show-the-text-label-in-plot-legend-e-g-remove-a-labels-line 
-    ax3.annotate(r"$E_{\nu}> 9\ \text{MeV}$", xy=(28, 38), xycoords='axes points',
-            fontsize=chosenFontSize, ha='right', va='top', 
+    ax3.annotate(r"$E_{\overline{\nu}_e}> 13.3\ \text{MeV}$", xy=(34, 38), xycoords='axes points',
+            fontsize=chosenFontSize*0.7, ha='right', va='top', 
             bbox=dict(boxstyle='round',pad=0.2, fc='w',linewidth=0.5,edgecolor=color2))
-    ax3.annotate(r"$E_{\nu}> 16\ \text{MeV}$", xy=(30, 23), xycoords='axes points',
-            fontsize=chosenFontSize, ha='right', va='top', 
+    ax3.annotate(r"$E_{\overline{\nu}_e}> 17.3\ \text{MeV}$", xy=(34, 30), xycoords='axes points',
+            fontsize=chosenFontSize*0.7, ha='right', va='top', 
             bbox=dict(boxstyle='round',pad=0.2, fc='w',linewidth=0.5,edgecolor=color1))
 
     #export plot figure 
@@ -494,7 +517,8 @@ if plotBool==3:
     #printer(rawSKbounds)
 
     #import no MSW plot data (error bar plot version) 
-    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNoMSW.csv")
+    #NOTE: change fiducial flavor conversion: to be NH not no MSW
+    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNHcorrect.csv")
     #printer(rawPlot2PdataNoMSW)
     #roughly formated as [[xErrorMin,xErrorMax],yValue] at 0,2,4,6 indices
     #other indices are names 
@@ -526,7 +550,7 @@ if plotBool==3:
     #chose size of figure
     fig4.set_figheight(1.2)
     fig4.set_figwidth(1.7)
-    chosenFontSize=4
+    chosenFontSize=6
 
     #get all dsnb flux data
     tempSFRmax=strToArray2(rawPlot2PdataNoMSW[1])
@@ -549,7 +573,7 @@ if plotBool==3:
     #adjust axes
     ax4.set_xlabel(r"$\text{E}_{\nu} \text{(MeV)}$",fontsize=chosenFontSize,labelpad=2)
     ax4.set_ylabel(r"$\frac{d\phi}{dE} (\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$)",fontsize=chosenFontSize,labelpad=2)
-    ax4.set_title("DSNB Flux (No MSW)",fontsize=chosenFontSize)
+    ax4.set_title("DSNB Flux (NH)",fontsize=chosenFontSize)
     ax4.tick_params(axis='both',which='major',labelsize=chosenFontSize,width=0.3) #alter major ticks
     ax4.tick_params(axis='both',which='minor',width=0.3) #change size of minor ticks 
     ax4.set_axisbelow(False) #force ticks to be above curves 
@@ -594,7 +618,8 @@ if plotBool==3:
     #REMOVED SK IV BDT 2021
     #ax4.errorbar(xVal4,yVal4,xerr=xError4,fmt='v',markersize=0.5,elinewidth=0.5,ecolor="purple",color='purple',label=SKboundLabel4,capsize=1,capthick=0.5)
     #create legend
-    ax4.legend(loc='lower left',bbox_to_anchor=(0.06,0.05,0.1,0.1),prop={'size':chosenFontSize/2})
+    #ax4.legend(loc='upper right',bbox_to_anchor=(1.0,0.9,0.1,0.1),prop={'size':chosenFontSize/2})
+    ax4.legend(loc='lower left',bbox_to_anchor=(0.06,0.05,0.1,0.1),prop={'size':chosenFontSize*0.3})
 
 #------------------------------------------------------------------
     #DSNB flux plot finale (with theory bound)  
@@ -611,6 +636,8 @@ if plotBool==4:
     #sort Barranco+18 data since it is not in ascending order of indep var x
     #in format of [[x,y],...] 
     #Barranco18=rawBarranco18[np.argsort(rawBarranco18[:,0])]
+
+    #NOTE: change fiducial flavor conversion: to be NH not no MSW
 
     #import theory bounds combined extrema from Abe etal. 2025 fig 1
     #rawTheoryMax=loadin2("max_fig1_abe2025.csv")
@@ -633,14 +660,14 @@ if plotBool==4:
     theoryMinFunc=interp(rawTheoryMin[:,0],rawTheoryMin[:,1])
 
     #import no MSW plot data 
-    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNoMSW.csv")
+    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNHcorrect.csv")
 
     #create figure 
     fig5, ax5= plt.subplots(nrows=1,ncols=1,tight_layout=True)
     #chose size of figure
     fig5.set_figheight(1.2)
     fig5.set_figwidth(1.7)
-    chosenFontSize=4
+    chosenFontSize=5
 
     #create x values
     xVal1=np.arange(5,50,1).tolist()
@@ -685,15 +712,17 @@ if plotBool==4:
 
 
     #beautify the plot
-    ax5.set_xlabel(r"$\text{E}_{\nu} \text{(MeV)}$",fontsize=chosenFontSize,labelpad=2)
-    ax5.set_ylabel(r"$\frac{d\phi}{dE} (\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$)",fontsize=chosenFontSize,labelpad=2)
-    ax5.set_title("DSNB Flux",fontsize=chosenFontSize)
+    ax5.set_xlabel(r"$\text{E}_{\overline{\nu}_e} \text{[MeV]}$",fontsize=chosenFontSize,labelpad=2)
+    ax5.set_ylabel(r"$d\phi/dE [\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$]",fontsize=chosenFontSize,labelpad=2)
+    ax5.set_title("DSNB Flux (NH)",fontsize=chosenFontSize)
     ax5.tick_params(axis='both',which='major',labelsize=chosenFontSize,width=0.3) #alter major ticks
     ax5.tick_params(axis='both',which='minor',width=0.3) #change size of minor ticks 
     ax5.set_axisbelow(False) #force ticks to be above curves 
     ax5.set_xlim(5,35)
     ax5.set_ylim(10**-3,2*10**2)
-    ax5.legend(loc='upper right',bbox_to_anchor=(0.8,0.8,0.1,0.1),prop={'size':chosenFontSize/2})
+    #ax5.legend(loc='upper right',bbox_to_anchor=(1.0,0.9,0.1,0.1),prop={'size':chosenFontSize/2})
+    ax5.legend(loc='lower left',bbox_to_anchor=(0.07,0.03,0.1,0.1),prop={'size':chosenFontSize/2})
+    #save plot via interface displayed
 
 #------------------------------------------------------------------
     #binned DSNB flux plot finale (with SK bound)  
@@ -721,11 +750,12 @@ if plotBool==5:
     #new format (hopefully works for python step plot but NOT mathematica )
     #x data formated as start x values plus one x midpoint at end 
     #y data formated as x values and one duplicate at end
-    xStartyValsPlus = loadin("xStartyValsPlus2.csv") #fiducial 
-    xStartyValsPlusMin = loadin("xStartyValsPlusMin2.csv") #min without SFR uncertainty
-    xStartyValsPlusMax = loadin("xStartyValsPlusMax2.csv") #max without SFR uncertainty
-    xStartyValsPlusMinSFR = loadin("xStartyValsPlusMinSFR2.csv") #min with SFR uncertainty
-    xStartyValsPlusMaxSFR = loadin("xStartyValsPlusMaxSFR2.csv") #max with SFR uncertainty
+    #NOTE: use new fiducial (NH) NOT the old fiducial choice with no MSW effect denoted "correct" 
+    xStartyValsPlus = loadin("xStartyValsPlus2correct.csv") #fiducial 
+    xStartyValsPlusMin = loadin("xStartyValsPlusMin2correct.csv") #min without SFR uncertainty
+    xStartyValsPlusMax = loadin("xStartyValsPlusMax2correct.csv") #max without SFR uncertainty
+    xStartyValsPlusMinSFR = loadin("xStartyValsPlusMinSFR2correct.csv") #min with SFR uncertainty
+    xStartyValsPlusMaxSFR = loadin("xStartyValsPlusMaxSFR2correct.csv") #max with SFR uncertainty
 
     #get all dsnb flux data
     tempFiducial=np.reshape(strToArray3(xStartyValsPlus)[0],(6,2))
@@ -766,7 +796,7 @@ if plotBool==5:
     #chose size of figure
     fig4.set_figheight(1.2)
     fig4.set_figwidth(1.7)
-    chosenFontSize=4
+    chosenFontSize=5
 
     #plot no MSW plot data
     ax4.step(tempFiducial[:,0],tempFiducial[:,1],label='Fiducial',color='black',linestyle='solid',linewidth=1)
@@ -783,9 +813,9 @@ if plotBool==5:
     #ax4.fill_between(tempSFRmin[:,0],tempMin[:,1],tempFiducial[:,1],color='tab:green',alpha=0.3)
     #ax4.fill_between(tempSFRmin[:,0],tempFiducial[:,1],tempMax[:,1],color='tab:green',alpha=0.3)
     #adjust axes
-    ax4.set_xlabel(r"$\text{E}_{\nu} \text{(MeV)}$",fontsize=chosenFontSize,labelpad=2)
-    ax4.set_ylabel(r"$\frac{d\phi}{dE} (\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$)",fontsize=chosenFontSize,labelpad=2)
-    ax4.set_title("DSNB Flux (No MSW)",fontsize=chosenFontSize)
+    ax4.set_xlabel(r"$\text{E}_{\overline{\nu}_e} \text{[MeV]}$",fontsize=chosenFontSize,labelpad=2)
+    ax4.set_ylabel(r"$d\phi/dE [\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$]",fontsize=chosenFontSize,labelpad=2)
+    ax4.set_title("DSNB Flux (NH)",fontsize=chosenFontSize)
     ax4.tick_params(axis='both',which='major',labelsize=chosenFontSize,width=0.3) #alter major ticks
     ax4.tick_params(axis='both',which='minor',width=0.3) #change size of minor ticks 
     ax4.set_axisbelow(False) #force ticks to be above curves 
@@ -832,9 +862,70 @@ if plotBool==5:
     #ax4.errorbar(xVal4,yVal4,xerr=xError4,fmt='v',markersize=0.5,elinewidth=0.5,ecolor="purple",color='purple',label=SKboundLabel4,capsize=1,capthick=0.5)
     #create legend
     #ax4.legend(loc='upper right',bbox_to_anchor=(0.85,0.85,0.1,0.1),prop={'size':chosenFontSize/2})
-    ax4.legend(loc='lower left',bbox_to_anchor=(0.06,0.05,0.1,0.1),prop={'size':chosenFontSize/2})
+    ax4.legend(loc='lower left',bbox_to_anchor=(0.05,0.04,0.1,0.1),prop={'size':chosenFontSize*0.4})
 
-#-------------------------------------------------------------------
+#------------------------------------------------------------------
+    #DSNB flux plot finale (with SK indication)  
+#------------------------------------------------------------------
+if plotBool==6:
+    print("creating DSNB flux finale plot (with SK 2026 indication)")
+    #NOTE: assume fiducial flavor conversion: to be NH not no MSW
+
+    #import SK 2026 DSNB indication (Horiuchi et al. 2009 (6 MeV Max))
+    #best fitted to SK-IV~VIII 5003 days (best-fit \pm1\sigma)
+    rawSKfig3=loadin4("SKfig3normalizedHoriuchi2026.csv")
+
+    #interpolate data
+    rawSKfig3Func=interp(rawSKfig3[:,0],rawSKfig3[:,1])
+
+    #import DSNB flux NH plot data 
+    rawPlot2PdataNoMSW=loadin("dsnbFluxPlotDataNHcorrect.csv")
+
+    #create figure 
+    fig6, ax6= plt.subplots(nrows=1,ncols=1,tight_layout=True)
+    #chose size of figure
+    fig6.set_figheight(1.2)
+    fig6.set_figwidth(1.7)
+    chosenFontSize=5
+
+    #print(rawSKfig3[:,0][1])
+    #create x values
+    xVal1=np.arange(5,50,1).tolist()
+    xVal2=np.arange(rawSKfig3[:,0][1],50,1).tolist()
+    #create new theory bound points
+    SKdsnbIndication = np.array([(x,rawSKfig3Func(x)) for x in xVal2])
+
+    #plot our no MSW plot data
+    #get all dsnb flux data
+    tempSFRmax=strToArray2(rawPlot2PdataNoMSW[1])
+    tempSFRmin=strToArray2(rawPlot2PdataNoMSW[3])
+    tempFiducial=strToArray2(rawPlot2PdataNoMSW[5])
+    tempMax=strToArray2(rawPlot2PdataNoMSW[7])
+    tempMin=strToArray2(rawPlot2PdataNoMSW[9])
+    #plot no MSW plot data
+    ax6.semilogy(tempFiducial[:,0],tempFiducial[:,1],label='Fiducial',color='black',linestyle='solid',linewidth=1)
+    ax6.semilogy(tempSFRmin[:,0],tempSFRmin[:,1],label='with SFR uncertainty',color='tab:blue',linestyle='solid')
+    ax6.semilogy(tempSFRmax[:,0],tempSFRmax[:,1],color='tab:blue',linestyle='solid')
+    ax6.semilogy(tempMin[:,0],tempMin[:,1],label='without SFR uncertainty',color='tab:green',linestyle='dashed')
+    ax6.semilogy(tempMax[:,0],tempMax[:,1],color='tab:green',linestyle='dashed')
+
+    #plot SK indication bound (normalized Horiuchi et al. 2009 best fitted to SK 2026 indication) 
+    SKfig3Color ="tab:red"
+    ax6.semilogy(SKdsnbIndication[:,0],SKdsnbIndication[:,1],color=SKfig3Color,linestyle="dotted",label=r"SK-IV$\sim$VIII (Horiuchi+09 best-fit)") 
+
+    #beautify the plot
+    ax6.set_xlabel(r"$\text{E}_{\overline{\nu}_e} \text{[MeV]}$",fontsize=chosenFontSize,labelpad=2)
+    ax6.set_ylabel(r"$d\phi/dE [\text{MeV}^{-1}\text{cm}^{-2}\text{s}^{-1}$]",fontsize=chosenFontSize,labelpad=2)
+    ax6.set_title("DSNB Flux (NH)",fontsize=chosenFontSize)
+    ax6.tick_params(axis='both',which='major',labelsize=chosenFontSize,width=0.3) #alter major ticks
+    ax6.tick_params(axis='both',which='minor',width=0.3) #change size of minor ticks 
+    ax6.set_axisbelow(False) #force ticks to be above curves 
+    ax6.set_xlim(5,35)
+    ax6.set_ylim(10**-3,2*10**2)
+    ax6.legend(loc='lower left',bbox_to_anchor=(0.07,0.03,0.1,0.1),prop={'size':chosenFontSize/2})
+    #save plot via interface displayed
+
+
 #outside all if branches
-#show plo
+#show plot
 plt.show()
